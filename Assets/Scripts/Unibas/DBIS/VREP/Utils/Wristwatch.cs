@@ -8,7 +8,7 @@ namespace DefaultNamespace
         private TextMesh watch;
         private MeshRenderer renderer;
         public Transform head;
-        public float viewAngle;
+        public float viewAngle, facingAngle;
 
         private void Start()
         {
@@ -21,17 +21,26 @@ namespace DefaultNamespace
             watch.text = DateTime.Now.ToString("HH:mm");
 
             var watchFacingDir = Quaternion.LookRotation(transform.forward);
+            var watchUpDir = Quaternion.LookRotation(transform.up);
             var facingDir = Quaternion.LookRotation(head.forward);
+            var facingUp = Quaternion.LookRotation(head.up);
 
             var angle = Quaternion.Angle(watchFacingDir, facingDir);
-
-            if (angle < 180)
+            var upAngle = Quaternion.Angle(watchUpDir, facingUp);
+            
+            if (angle < viewAngle && upAngle < facingAngle)
             {
-                renderer.enabled = true;
+                if (!renderer.enabled)
+                {
+                    renderer.enabled = true;
+                }
             }
             else
             {
-                renderer.enabled = false;
+                if (renderer.enabled)
+                {
+                    renderer.enabled = false;
+                }
             }
             
             //var color = watch.color;
