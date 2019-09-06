@@ -7,8 +7,7 @@ namespace Unibas.DBIS.VREP.Photobooth
     {
         public Material material;
         public Transform target;
-        public bool undistorted = true;
-        public bool cropped = true;
+        public bool undistorted = false;
 
         private void OnEnable()
         {
@@ -50,37 +49,21 @@ namespace Unibas.DBIS.VREP.Photobooth
             material.mainTexture = texture;
 
             // Adjust the height of the quad based on the aspect to keep the texels square.
-            float aspect = (float)texture.width / texture.height;
+            float aspect = (float)texture.width / (texture.height / 2f);
 
-            // The undistorted video feed has 'bad' areas near the edges where the original
-            // square texture feed is stretched to undo the fisheye from the lens.
-            // Therefore, you'll want to crop it to the specified frameBounds to remove this.
-            if (cropped)
-            {
-                VRTextureBounds_t bounds = source.frameBounds;
-                material.mainTextureOffset = new Vector2(bounds.uMin, bounds.vMin);
-
-                float du = bounds.uMax - bounds.uMin;
-                float dv = bounds.vMax - bounds.vMin;
-                material.mainTextureScale = new Vector2(du, dv);
-
-                aspect *= Mathf.Abs(du / dv);
-            }
-            else
-            {
-                material.mainTextureOffset = Vector2.zero;
-                material.mainTextureScale = new Vector2(1, -1);
-            }
+            
+            material.mainTextureOffset = Vector2.zero;
+            material.mainTextureScale = new Vector2(1, -0.5f);
 
             target.localScale = new Vector3(1, 1.0f / aspect, 1);
 
             // Apply the pose that this frame was recorded at.
-            if (source.hasTracking)
+            /*if (source.hasTracking)
             {
                 SteamVR_Utils.RigidTransform rigidTransform = source.transform;
                 target.localPosition = rigidTransform.pos;
                 target.localRotation = rigidTransform.rot;
-            }
+            }*/
         }
         
     }
