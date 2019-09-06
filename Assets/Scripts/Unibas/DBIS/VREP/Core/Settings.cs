@@ -48,6 +48,11 @@ namespace DefaultNamespace
         /// Default: False
         /// </summary>
         public bool PlaygroundEnabled = false;
+
+        /// <summary>
+        /// Whether the experimental, "photobooth" features are enabled
+        /// </summary>
+        public bool EnablePhotobooth = true;
         
         
 
