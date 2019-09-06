@@ -1,19 +1,35 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 using Valve.VR;
 
 namespace Unibas.DBIS.VREP.Photobooth
 {
+    /// <summary>
+    /// Based on SteamVR_TestTrackedCamera
+    /// </summary>
     public class MixedRealityCamera : MonoBehaviour
     {
-        public Material material;
-        public Transform target;
-        public bool undistorted = false;
+        public MeshRenderer Screen;
+        
+        private Material material;
+        private Transform target;
+
+        public float ScalingFactor = 2f;
+        
+        
+        private readonly bool undistorted = false;
+
+        private void Awake()
+        {
+            material = Screen.material;
+            target = Screen.transform;
+        }
 
         private void OnEnable()
         {
             // The video stream must be symmetrically acquired and released in
             // order to properly disable the stream once there are no consumers.
-            SteamVR_TrackedCamera.VideoStreamTexture source = SteamVR_TrackedCamera.Source(undistorted);
+            SteamVR_TrackedCamera.VideoStreamTexture source = SteamVR_TrackedCamera.Source(undistorted); // Empirically found
             source.Acquire();
 
             // Auto-disable if no camera is present.
@@ -53,17 +69,10 @@ namespace Unibas.DBIS.VREP.Photobooth
 
             
             material.mainTextureOffset = Vector2.zero;
-            material.mainTextureScale = new Vector2(1, -0.5f);
+            material.mainTextureScale = new Vector2(1, -(1/2f));
 
-            target.localScale = new Vector3(1, 1.0f / aspect, 1);
+            target.localScale = new Vector3(ScalingFactor, ScalingFactor / aspect, ScalingFactor);
 
-            // Apply the pose that this frame was recorded at.
-            /*if (source.hasTracking)
-            {
-                SteamVR_Utils.RigidTransform rigidTransform = source.transform;
-                target.localPosition = rigidTransform.pos;
-                target.localRotation = rigidTransform.rot;
-            }*/
         }
         
     }
