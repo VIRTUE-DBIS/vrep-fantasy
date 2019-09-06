@@ -69,15 +69,10 @@ namespace Unibas.DBIS.VREP.Photobooth
 
             
             material.mainTextureOffset = Vector2.zero;
-            material.mainTextureScale = new Vector2(ScalingFactor, -(ScalingFactor/2f));
+            material.mainTextureScale = new Vector2(1, -(1/2f));
 
             target.localScale = new Vector3(ScalingFactor, ScalingFactor / aspect, ScalingFactor);
 
-        }
-        
-        private void OnRenderImage(RenderTexture source, RenderTexture destination)
-        {
-            Graphics.Blit(source, destination, this.material);
         }
         
     }
