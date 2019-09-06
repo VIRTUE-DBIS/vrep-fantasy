@@ -2,26 +2,35 @@
 {
 	Properties
 	{
-		_MainTex ("Texture", 2D) = "white" {}
-		_TexReplacer("Texture", 2D) = "white" {}
-		_GreenColor("Green Color", Color) = (0,0,0,0)
-		_Sensitivity("Threshold Sensitivity", Range(0,1)) = 0.5
-		_Smooth("Smoothing", Range(0,1)) = 0.5
-		[Toggle]_ShowBackground("Show Only Background", Float) = 0
-		[Toggle]_ShowOriginal("Show Original Video", Float) = 0
+		 _MainTex ("Base (RGB)", 2D) = "white" {}
+        _thresh ("Threshold", Range (0, 16)) = 0.8
+        _slope ("Slope", Range (0, 1)) = 0.2
+        _keyingColor ("Key Colour", Color) = (1,1,1,1)
 	}
 	SubShader
 	{
-		// No culling or depth
-		Cull Off ZWrite Off ZTest Always
+		Tags {"Queue"="Transparent" "IgnoreProjector"="True" "RenderType"="Transparent"}
+        LOD 100
+        
+        Lighting Off
+        ZWrite Off
+        AlphaTest Off
+        Blend SrcAlpha OneMinusSrcAlpha 
 
 		Pass
 		{
 			CGPROGRAM
 			#pragma vertex vert
 			#pragma fragment frag
-			
-			#include "UnityCG.cginc"
+			                
+			#pragma fragmentoption ARB_precision_hint_fastest
+
+            sampler2D _MainTex;
+            float3 _keyingColor;
+            float _thresh; // 0.8
+            float _slope; // 0.2
+
+            #include "UnityCG.cginc"
 
 			struct appdata
 			{
@@ -43,42 +52,16 @@
 				return o;
 			}
 			
-			sampler2D _MainTex;
-			sampler2D _TexReplacer;
-			float3 _GreenColor;
-			float _Sensitivity;
-			float _Smooth;
-			float _ShowOriginal;
-			float _ShowBackground;
-
-			fixed4 frag (v2f i) : SV_Target
-			{
-				fixed4 col = tex2D(_MainTex, i.uv);
-				
-				if (_ShowBackground)
-				{
-					fixed4 col2 = tex2D(_TexReplacer, i.uv);
-					col = col2;
-				}
-				else if (!_ShowOriginal)
-				{
-					fixed4 col2 = tex2D(_TexReplacer, i.uv);
-
-					float maskY = 0.2989 * _GreenColor.r + 0.5866 * _GreenColor.g + 0.1145 * _GreenColor.b;
-					float maskCr = 0.7132 * (_GreenColor.r - maskY);
-					float maskCb = 0.5647 * (_GreenColor.b - maskY);
-
-					float Y = 0.2989 * col.r + 0.5866 * col.g + 0.1145 * col.b;
-					float Cr = 0.7132 * (col.r - Y);
-					float Cb = 0.5647 * (col.b - Y);
-
-					float alpha = smoothstep(_Sensitivity, _Sensitivity + _Smooth, distance(float2(Cr, Cb), float2(maskCr, maskCb)));
-
-					col = (alpha * col) + ((1 - alpha) * col2);
-				}
-				return col;
-			}
+			 float4 frag(v2f i) : COLOR {
+                    float3 input_color = tex2D(_MainTex, i.uv).rgb;
+                    float d = abs(length(abs(_keyingColor.rgb - input_color.rgb)));
+                    float edge0 = _thresh * (1.0 - _slope);
+                    float alpha = smoothstep(edge0 , _thresh, d);
+                    return float4(input_color, alpha);
+            }
 			ENDCG
 		}
 	}
+	
+FallBack "Unlit"
 }
