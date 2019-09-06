@@ -5,7 +5,7 @@
 		 _MainTex ("Base (RGB)", 2D) = "white" {}
         _thresh ("Threshold", Range (0, 16)) = 0.8
         _slope ("Slope", Range (0, 1)) = 0.2
-        _keyingColor ("Key Colour", Color) = (1,1,1,1)
+        _keyingColor ("Key Colour", Color) = (1,0,0,1)
 	}
 	SubShader
 	{
@@ -29,6 +29,7 @@
             float3 _keyingColor;
             float _thresh; // 0.8
             float _slope; // 0.2
+            float4 _MainTex_ST;
 
             #include "UnityCG.cginc"
 
@@ -53,7 +54,8 @@
 			}
 			
 			 float4 frag(v2f i) : COLOR {
-                    float3 input_color = tex2D(_MainTex, i.uv).rgb;
+			        float2 newUV = TRANSFORM_TEX(i.uv, _MainTex);
+                    float3 input_color = tex2D(_MainTex, newUV).rgb;
                     float d = abs(length(abs(_keyingColor.rgb - input_color.rgb)));
                     float edge0 = _thresh * (1.0 - _slope);
                     float alpha = smoothstep(edge0 , _thresh, d);
