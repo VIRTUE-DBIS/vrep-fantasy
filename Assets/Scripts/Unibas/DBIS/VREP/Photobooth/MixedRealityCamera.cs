@@ -75,5 +75,10 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         }
         
+        private void OnRenderImage(RenderTexture source, RenderTexture destination)
+        {
+            Graphics.Blit(source, destination, this.material);
+        }
+        
     }
 }
