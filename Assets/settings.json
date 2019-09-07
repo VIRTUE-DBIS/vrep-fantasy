@@ -1,6 +1,6 @@
 {
   "StartInLobby": true,
-  "VREMAddress": "http://localhost:4567",
+  "VREMAddress": "http://10.34.58.81:5002",
   "SpotsEnabled": false,
   "LobbyFloorLogoEnabled": true,
   "LobbyCeilingLogoEnabled": true,
