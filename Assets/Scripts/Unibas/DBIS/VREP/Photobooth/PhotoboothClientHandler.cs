@@ -11,5 +11,6 @@ namespace Unibas.DBIS.VREP.Photobooth
         void HandleGetHistory(HistoryList list);
         void HandleGetPrint(SuccessResponse response);
         void HandleError(string msg);
+        void HandlePostcardInfo(ImageInfo obj);
     }
 }

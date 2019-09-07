@@ -9,8 +9,8 @@ namespace Unibas.DBIS.VREP.Photobooth
     {
         private bool activated = false;
 
-        public ImageLoader PostcardScreen;
         public ImageCapturerer Capturerer;
+        public PostcardScreen Screen;
         
         private PhotoboothClient client;
 
@@ -58,7 +58,8 @@ namespace Unibas.DBIS.VREP.Photobooth
         
         public void DisplayPostcard(string id)
         {
-            PostcardScreen.ReloadImage(client.GetImageUrl(id));
+            
+            client.GetPostcardInfo(id);
         }
 
         public void HandleGetPostcards(PostcardsList list)
@@ -90,6 +91,11 @@ namespace Unibas.DBIS.VREP.Photobooth
         public void HandleError(string msg)
         {
             Debug.LogError(msg);
+        }
+
+        public void HandlePostcardInfo(ImageInfo obj)
+        {
+            Screen.Display(client.GetImageUrl(obj.id), obj.width, obj.height);
         }
     }
 }
