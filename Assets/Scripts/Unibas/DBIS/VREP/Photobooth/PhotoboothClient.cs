@@ -83,18 +83,19 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         private IEnumerator UploadBytesDirectly(byte[] bytes, string url, Action<IdObject> processor, Action<string> errorHandler)
         {
-            WWW www = new WWW(url, bytes);
-            yield return www;
-            if (www.error == null && processor != null)
+            using (var w = UnityWebRequest.Put(url, bytes))
             {
-                processor.Invoke(JsonUtility.FromJson<IdObject>(www.text));
-            }
-            else
-            {
-                Debug.LogError(www.error);
-                if (errorHandler != null)
+                yield return w.SendWebRequest();
+                if (w.isNetworkError || w.isHttpError)
                 {
-                    errorHandler.Invoke(www.error);
+                    Handler.HandleError(w.error);
+                }
+                else
+                {
+                    
+                    string response = w.downloadHandler.text;
+                    Debug.Log("Response: "+response);
+                    Handler.HandlePostSnapshot(JsonUtility.FromJson<IdObject>(response));
                 }
             }
         }

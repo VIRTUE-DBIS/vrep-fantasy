@@ -51,7 +51,7 @@ namespace Unibas.DBIS.VREP.Photobooth
             Capturerer.Capture((bytes =>
             {
                 Debug.Log("Uplaoding image");
-                client.PostSnapshot(bytes, "C4990_1"); // TODO fix this
+                client.PostSnapshot(bytes, "C4823_1"); // TODO fix this
                 Debug.Log("Sent bytes...");
             }));
         }
