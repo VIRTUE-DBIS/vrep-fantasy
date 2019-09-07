@@ -14,13 +14,15 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         public PhotoboothClientHandler Handler;
 
-        private const string GET_POSTCARDS_ACTION = "postcards";
-        private const string GET_POSTCARDS_RANDOM_ACTION = "postcards/random";
-        private const string GET_POSTCARD_ACTION = "postcard/:id";
-        private const string GET_POSTCARD_AUDIO_ACTION = "postcard/:id/audio";
+        private const string LIST_POSTCARDS_ACTION = "postcard/list";
+        private const string GET_POSTCARDS_RANDOM_ACTION = "postcard/random";
+        private const string GET_POSTCARD_ACTION = "postcard/image/:id";
+        private const string GET_POSTCARD_AUDIO_ACTION = "postcard/audio/:id";
         private const string ID_PARAMETER_NAME = ":id";
-        private const string GET_HISTORY_ACTION = "history";
+        private const string GET_HISTORY_ACTION = "history/list";
+        private const string GET_HISTORY_IMAGE_ACITON = "history/image/:id";
         private const string GET_PRINT_ACTION = "print/:id";
+        private const string GET_GENERATE_ACTION = "generate/:id";
         private const string POST_SNAPSHOT_ACTION = "snapshot";
         private const string FORM_FIELD_IMAGE_NAME = "file";
 
@@ -32,13 +34,19 @@ namespace Unibas.DBIS.VREP.Photobooth
         /// </summary>
         public void GetPostcards()
         {
-            StartCoroutine(RequestGet<PostcardsList>(ServerUrl + GET_POSTCARDS_ACTION, Handler.HandleGetPostcards,
+            StartCoroutine(RequestGet<PostcardsList>(ServerUrl + LIST_POSTCARDS_ACTION, Handler.HandleGetPostcards,
                 Handler.HandleError));
+        }
+
+        public void SetServerURL(string url)
+        {
+            ServerUrl = url;
+            SanitizeServerUrl();
         }
         
         public void GetRandomPostcard()
         {
-            StartCoroutine(RequestGet<IdObject>(ServerUrl + GET_POSTCARDS_RANDOM_ACTION, Handler.HandleGetPostcards,
+            StartCoroutine(RequestGet<PostcardsList>(ServerUrl + GET_POSTCARDS_RANDOM_ACTION, Handler.HandleRandomPostcard,
                 Handler.HandleError));
         }
 
@@ -62,7 +70,26 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         public void PostSnapshot(byte[] data)
         {
-            
+            StartCoroutine(UploadBytesDirectly(data, ServerUrl + GET_GENERATE_ACTION, Handler.HandlePostSnapshot,
+                Handler.HandleError));
+        }
+
+        private IEnumerator UploadBytesDirectly(byte[] bytes, string url, Action<IdObject> processor, Action<string> errorHandler)
+        {
+            WWW www = new WWW(url, bytes);
+            yield return www;
+            if (www.error == null && processor != null)
+            {
+                processor.Invoke(JsonUtility.FromJson<IdObject>(www.text));
+            }
+            else
+            {
+                Debug.LogError(www.error);
+                if (errorHandler != null)
+                {
+                    errorHandler.Invoke(www.error);
+                }
+            }
         }
 
         private IEnumerator UploadBytes(byte[] bytes, string url)
@@ -88,10 +115,12 @@ namespace Unibas.DBIS.VREP.Photobooth
         private static IEnumerator<WWW> RequestGet<O>(string url, Action<O> processor,
             Action<string> errorHandler = null)
         {
+            Debug.Log("RequestGet to "+url);
             WWW www = new WWW(url);
             yield return www;
             if (www.error == null && processor != null)
             {
+                Debug.Log("Received: "+www.text);
                 processor.Invoke(JsonUtility.FromJson<O>(www.text));
             }
             else

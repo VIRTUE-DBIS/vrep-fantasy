@@ -14,17 +14,36 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         private List<string> capturedCards;
         private string[] availableCards;
-        
+
+        private void Awake()
+        {
+            client = gameObject.AddComponent<PhotoboothClient>();
+            client.SetServerURL("http://192.168.92.22:5002");
+            client.Handler = this;
+        }
+
         private void Start()
         {
             activated = VREPController.Instance.Settings.EnablePhotobooth;
         }
 
+        private bool first = true;
+        
         private void Update()
         {
-            
+            if (first)
+            {
+                RequestRandomPostcard();
+                first = false;
+            }
         }
 
+
+        public void RequestRandomPostcard()
+        {
+            client.GetRandomPostcard();
+        }
+        
         public void DisplayPostcard(string id)
         {
             PostcardScreen.ReloadImage(client.GetImageUrl(id));
@@ -33,6 +52,12 @@ namespace Unibas.DBIS.VREP.Photobooth
         public void HandleGetPostcards(PostcardsList list)
         {
             availableCards = list.postcards;
+        }
+
+        public void HandleRandomPostcard(PostcardsList list)
+        {
+            Debug.Log("Will display image with id: "+list.postcards[0]);
+            DisplayPostcard(list.postcards[0]);
         }
 
         public void HandlePostSnapshot(IdObject idObject)
