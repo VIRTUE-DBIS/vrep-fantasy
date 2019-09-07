@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Unibas.DBIS.VREP.Photobooth.Models;
 using UnityEngine;
 
@@ -7,6 +8,12 @@ namespace Unibas.DBIS.VREP.Photobooth
     public class PhotoboothController : MonoBehaviour, PhotoboothClientHandler
     {
         private bool activated = false;
+
+        public ImageLoader PostcardScreen;
+        private PhotoboothClient client;
+
+        private List<string> capturedCards;
+        private string[] availableCards;
         
         private void Start()
         {
@@ -18,14 +25,19 @@ namespace Unibas.DBIS.VREP.Photobooth
             
         }
 
+        public void DisplayPostcard(string id)
+        {
+            PostcardScreen.ReloadImage(client.GetImageUrl(id));
+        }
+
         public void HandleGetPostcards(PostcardsList list)
         {
-            throw new NotImplementedException();
+            availableCards = list.postcards;
         }
 
         public void HandlePostSnapshot(IdObject idObject)
         {
-            throw new NotImplementedException();
+            capturedCards.Add(idObject.id);
         }
 
         public void HandleGetHistory(HistoryList list)
@@ -35,12 +47,12 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         public void HandleGetPrint(SuccessResponse response)
         {
-            throw new NotImplementedException();
+            // we just ignore it for now
         }
 
         public void HandleError(string msg)
         {
-            throw new NotImplementedException();
+            Debug.LogError(msg);
         }
     }
 }
