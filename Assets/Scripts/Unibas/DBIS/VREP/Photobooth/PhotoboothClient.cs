@@ -68,9 +68,9 @@ namespace Unibas.DBIS.VREP.Photobooth
                 Handler.HandleError));
         }
 
-        public void PostSnapshot(byte[] data)
+        public void PostSnapshot(byte[] data, string id)
         {
-            StartCoroutine(UploadBytesDirectly(data, ServerUrl + GET_GENERATE_ACTION, Handler.HandlePostSnapshot,
+            StartCoroutine(UploadBytesDirectly(data, ServerUrl + GET_GENERATE_ACTION.Replace(ID_PARAMETER_NAME, id), Handler.HandlePostSnapshot,
                 Handler.HandleError));
         }
 

@@ -10,9 +10,11 @@ namespace Unibas.DBIS.VREP.Photobooth
         private bool activated = false;
 
         public ImageLoader PostcardScreen;
+        public ImageCapturerer Capturerer;
+        
         private PhotoboothClient client;
 
-        private List<string> capturedCards;
+        private List<string> capturedCards = new List<string>();
         private string[] availableCards;
 
         private void Awake()
@@ -28,7 +30,7 @@ namespace Unibas.DBIS.VREP.Photobooth
         }
 
         private bool first = true;
-        
+
         private void Update()
         {
             if (first)
@@ -42,6 +44,16 @@ namespace Unibas.DBIS.VREP.Photobooth
         public void RequestRandomPostcard()
         {
             client.GetRandomPostcard();
+        }
+
+        public void UploadImage()
+        {
+            Capturerer.Capture((bytes =>
+            {
+                Debug.Log("Uplaoding image");
+                client.PostSnapshot(bytes, "C4990_1"); // TODO fix this
+                Debug.Log("Sent bytes...");
+            }));
         }
         
         public void DisplayPostcard(string id)

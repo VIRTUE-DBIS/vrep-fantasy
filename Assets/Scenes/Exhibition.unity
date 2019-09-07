@@ -351,6 +351,7 @@ GameObject:
   - component: {fileID: 300768208}
   - component: {fileID: 300768207}
   - component: {fileID: 300768206}
+  - component: {fileID: 300768211}
   m_Layer: 0
   m_Name: PhotoScreenQuad
   m_TagString: Untagged
@@ -443,6 +444,19 @@ Transform:
   m_Father: {fileID: 471107342}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 120, z: 0}
+--- !u!114 &300768211
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 300768205}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4adb730525554464a6ea5e6b8ed95d63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Material: {fileID: 2100000, guid: 872c918e12b121d4b9e71fea0604e4ab, type: 2}
 --- !u!1 &322547914
 GameObject:
   m_ObjectHideFlags: 0
@@ -2520,6 +2534,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   PostcardScreen: {fileID: 300768206}
+  Capturerer: {fileID: 300768211}
 --- !u!1 &1204909359
 GameObject:
   m_ObjectHideFlags: 0
