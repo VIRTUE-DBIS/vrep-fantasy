@@ -2,7 +2,7 @@
 
 namespace Unibas.DBIS.VREP.Photobooth.Models
 {
-    [Serializable]
+    [Serializable][Obsolete]
     public class PhotoCapture
     {
         public string data;

@@ -10,7 +10,7 @@ namespace Unibas.DBIS.VREP.Photobooth
     public class ImageCapturerer : MonoBehaviour
     {
 
-        public Material Material;
+        public Renderer Renderer;
 
         public void Capture(Action<byte[]> handler)
         {
@@ -21,7 +21,7 @@ namespace Unibas.DBIS.VREP.Photobooth
         private IEnumerator DoCapture(Action<byte[]> handler)
         {
             yield return new WaitForEndOfFrame();
-            var tex = Material.mainTexture.Convert();
+            var tex = Renderer.material.mainTexture.Convert();
             byte[] bytes = tex.EncodeToPNG();
             Destroy(tex);
             handler.Invoke(bytes);

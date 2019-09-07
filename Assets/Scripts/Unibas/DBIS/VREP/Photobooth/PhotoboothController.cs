@@ -9,30 +9,68 @@ namespace Unibas.DBIS.VREP.Photobooth
     {
         private bool activated = false;
 
-        public ImageLoader PostcardScreen;
+        public ImageCapturerer Capturerer;
+        public PostcardScreen Screen;
+        
         private PhotoboothClient client;
 
-        private List<string> capturedCards;
+        private List<string> capturedCards = new List<string>();
         private string[] availableCards;
-        
+
+        private void Awake()
+        {
+            client = gameObject.AddComponent<PhotoboothClient>();
+            client.SetServerURL("http://192.168.92.22:5002");
+            client.Handler = this;
+        }
+
         private void Start()
         {
             activated = VREPController.Instance.Settings.EnablePhotobooth;
         }
 
+        private bool first = true;
+
         private void Update()
         {
-            
+            if (first)
+            {
+                RequestRandomPostcard();
+                first = false;
+            }
         }
 
+
+        public void RequestRandomPostcard()
+        {
+            client.GetRandomPostcard();
+        }
+
+        public void UploadImage()
+        {
+            Capturerer.Capture((bytes =>
+            {
+                Debug.Log("Uplaoding image");
+                client.PostSnapshot(bytes, "C4823_1"); // TODO fix this
+                Debug.Log("Sent bytes...");
+            }));
+        }
+        
         public void DisplayPostcard(string id)
         {
-            PostcardScreen.ReloadImage(client.GetImageUrl(id));
+            
+            client.GetPostcardInfo(id);
         }
 
         public void HandleGetPostcards(PostcardsList list)
         {
             availableCards = list.postcards;
+        }
+
+        public void HandleRandomPostcard(PostcardsList list)
+        {
+            Debug.Log("Will display image with id: "+list.postcards[0]);
+            DisplayPostcard(list.postcards[0]);
         }
 
         public void HandlePostSnapshot(IdObject idObject)
@@ -53,6 +91,11 @@ namespace Unibas.DBIS.VREP.Photobooth
         public void HandleError(string msg)
         {
             Debug.LogError(msg);
+        }
+
+        public void HandlePostcardInfo(ImageInfo obj)
+        {
+            Screen.Display(client.GetImageUrl(obj.id), obj.width, obj.height);
         }
     }
 }

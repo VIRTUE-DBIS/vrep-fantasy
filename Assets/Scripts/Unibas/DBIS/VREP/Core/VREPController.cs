@@ -95,8 +95,12 @@ namespace Unibas.DBIS.VREP
             PuzzleManager = gameObject.AddComponent<PuzzleManager>();
 
             FadeController = gameObject.AddComponent<FadeController>();
-            
-            LoadAndCreateExhibition();
+
+
+            if (!Settings.EnablePhotobooth)
+            {
+                LoadAndCreateExhibition();
+            }
         }
 
         public FadeController FadeController;

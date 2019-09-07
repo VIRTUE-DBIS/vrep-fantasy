@@ -6,9 +6,11 @@ namespace Unibas.DBIS.VREP.Photobooth
     {
 
         void HandleGetPostcards(PostcardsList list);
+        void HandleRandomPostcard(PostcardsList list);
         void HandlePostSnapshot(IdObject idObject);
         void HandleGetHistory(HistoryList list);
         void HandleGetPrint(SuccessResponse response);
         void HandleError(string msg);
+        void HandlePostcardInfo(ImageInfo obj);
     }
 }

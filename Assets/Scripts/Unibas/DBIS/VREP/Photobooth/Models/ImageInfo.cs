@@ -3,9 +3,10 @@
 namespace Unibas.DBIS.VREP.Photobooth.Models
 {
     [Serializable]
-    public class IdObject
+    public class ImageInfo
     {
-        public int status;
         public string id;
+        public float width;
+        public float height;
     }
 }

@@ -5,6 +5,6 @@ namespace Unibas.DBIS.VREP.Photobooth.Models
     [Serializable]
     public class HistoryList
     {
-        public string[] images;
+        public string[] snapshots;
     }
 }
