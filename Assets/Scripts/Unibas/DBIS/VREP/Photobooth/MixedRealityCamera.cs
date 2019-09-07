@@ -17,7 +17,7 @@ namespace Unibas.DBIS.VREP.Photobooth
         public float ScalingFactorX = 2f;
         public float ScalingFactorY = 3f;
         public float TextureScalingFactorX = 0.2f;
-        public float TextureScalingFactorY = 0.3f;
+        public float TextureScalingFactorY = 0.35f;
         public float TextureOffsetX = 0.35f;
         public float TextureOffsetY = 0.4f;
 
