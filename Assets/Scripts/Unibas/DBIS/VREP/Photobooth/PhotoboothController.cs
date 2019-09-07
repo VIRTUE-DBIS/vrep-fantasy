@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using Unibas.DBIS.VREP.Photobooth.Models;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Unibas.DBIS.VREP.Photobooth
 {
@@ -60,6 +62,35 @@ namespace Unibas.DBIS.VREP.Photobooth
         {
             
             client.GetPostcardInfo(id);
+        }
+
+        public void PollForCompletion(string id, int interval, Action<string> completionHandler)
+        {
+            
+        }
+        
+        private IEnumerator GetText(string url, int interval, Action<string> completionHandler)
+        {
+            using (UnityWebRequest uwr = UnityWebRequest.Get(url))
+            {
+                yield return uwr.SendWebRequest();
+
+                if (uwr.isNetworkError || uwr.isHttpError)
+                {
+                    Debug.Log(uwr.error);
+                }
+                else
+                {
+                    if (uwr.responseCode == 200)
+                    {
+                        completionHandler.Invoke(url);
+                    }
+                    else
+                    {
+                        yield return new WaitForSecondsRealtime(interval);
+                    }
+                }
+            }
         }
 
         public void HandleGetPostcards(PostcardsList list)

@@ -92,15 +92,16 @@ namespace Unibas.DBIS.VREP.Photobooth
                 }
                 else
                 {
-                    
+                    // 4701a97b-24b6-49c2-bd9a-b74760316ada - a test id
                     string response = w.downloadHandler.text;
-                    Debug.Log("Response: "+response);
+                    Debug.Log("Response: "+Encoding.UTF8.GetString(w.downloadHandler.data, 0, w.downloadHandler.data.Length));
                     Handler.HandlePostSnapshot(JsonUtility.FromJson<IdObject>(response));
+                    w.Dispose();
                 }
             }
         }
 
-        private IEnumerator UploadBytes(byte[] bytes, string url)
+        [Obsolete] private IEnumerator UploadBytes(byte[] bytes, string url)
         {
             WWWForm form = new WWWForm();
             form.AddBinaryData(FORM_FIELD_IMAGE_NAME, bytes, "image.png", "image/png");
