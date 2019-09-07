@@ -8,6 +8,8 @@ namespace Unibas.DBIS.VREP.Photobooth
 {
     public class PostcardScreen : MonoBehaviour
     {
+        public bool DoesRescale = false;
+        
         private string url;
 
         private float width;
@@ -24,7 +26,10 @@ namespace Unibas.DBIS.VREP.Photobooth
             this.width = width;
             this.height = height;
             StartCoroutine(GetText(url));
-            Rescale(width, height);
+            if (DoesRescale)
+            {
+                Rescale(width, height);
+            }
         }
         
         private void Rescale(float width, float height)
@@ -33,7 +38,7 @@ namespace Unibas.DBIS.VREP.Photobooth
             float newWidth = 5f; // TODO make configurable
             float newHeight = newWidth / ratio;
             transform.localScale = new Vector3(newWidth, newHeight);
-            transform.localPosition = new Vector3(transform.localPosition.x, (-transform.localPosition.y + newHeight)/2f, transform.localPosition.z);
+            transform.localPosition = new Vector3(transform.localPosition.x, (transform.localPosition.y - (newHeight/4f)), transform.localPosition.z);
         }
         
         private MeshRenderer _renderer;
