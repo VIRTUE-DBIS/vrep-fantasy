@@ -66,10 +66,10 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         public void PollForCompletion(string id, int interval, Action<string> completionHandler)
         {
-            
+            StartCoroutine(PollForImage(client.GetImageUrl(id), 60, s => Debug.Log("Done for " + s)));
         }
         
-        private IEnumerator GetText(string url, int interval, Action<string> completionHandler)
+        private IEnumerator PollForImage(string url, int interval, Action<string> completionHandler)
         {
             using (UnityWebRequest uwr = UnityWebRequest.Get(url))
             {
