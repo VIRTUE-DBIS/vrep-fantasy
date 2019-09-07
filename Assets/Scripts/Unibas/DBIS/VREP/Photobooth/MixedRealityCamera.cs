@@ -14,8 +14,13 @@ namespace Unibas.DBIS.VREP.Photobooth
         private Material material;
         private Transform target;
 
-        public float ScalingFactor = 2f;
-        
+        public float ScalingFactorX = 2f;
+        public float ScalingFactorY = 3f;
+        public float TextureScalingFactorX = 0.2f;
+        public float TextureScalingFactorY = 0.3f;
+        public float TextureOffsetX = 0.35f;
+        public float TextureOffsetY = 0.4f;
+
         
         private readonly bool undistorted = false;
 
@@ -68,10 +73,10 @@ namespace Unibas.DBIS.VREP.Photobooth
             float aspect = (float)texture.width / (texture.height / 2f);
 
             
-            material.mainTextureOffset = Vector2.zero;
-            material.mainTextureScale = new Vector2(1, -(1/2f));
+            material.mainTextureOffset = new Vector2(TextureOffsetX, TextureOffsetY);
+            material.mainTextureScale = new Vector2(1 * TextureScalingFactorX, -(1/2f) * TextureScalingFactorY);
 
-            target.localScale = new Vector3(ScalingFactor, ScalingFactor / aspect, ScalingFactor);
+            target.localScale = new Vector3(ScalingFactorX, ScalingFactorY, 1f);
 
         }
         

@@ -5,7 +5,7 @@
 		 _MainTex ("Base (RGB)", 2D) = "white" {}
         _thresh ("Threshold", Range (0, 16)) = 0.8
         _slope ("Slope", Range (0, 1)) = 0.2
-        _keyingColor ("Key Colour", Color) = (1,0,0,1)
+        _keyingColor ("Key Colour", Color) = (0,0,1,1)
 	}
 	SubShader
 	{
