@@ -4,19 +4,15 @@ using System.Collections.Generic;
 using System.Text;
 using Unibas.DBIS.VREP.Photobooth.Models;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace Unibas.DBIS.VREP.Photobooth
 {
     public class PhotoboothClient : MonoBehaviour
     {
         public string ServerUrl;
-        public string ImageHostUrl;
 
         public PhotoboothClientHandler Handler;
-
-        private string suffix;
-
-        private string response;
 
         private const string GET_POSTCARDS_ACTION = "postcards";
         private const string GET_POSTCARD_ACTION = "postcard/:id";
@@ -24,22 +20,10 @@ namespace Unibas.DBIS.VREP.Photobooth
         private const string GET_HISTORY_ACTION = "history";
         private const string GET_PRINT_ACTION = "print/:id";
         private const string POST_SNAPSHOT_ACTION = "snapshot";
+        private const string FORM_FIELD_IMAGE_NAME = "file";
 
         private Action<string> responseProcessor;
 
-
-        /// <summary>
-        /// Requests an exhibition and calls the processor, once the exhibition is loaded.
-        /// </summary>
-        /// <param name="exhibitionId">The ID of the exhibition</param>
-        /// <param name="processor">An Action which processes VREM's response. If null is passed to that action, an error occurred</param>
-        public void RequestExhibition(string exhibitionId, Action<string> processor)
-        {
-            // TODO Refactor Action to a proper interface
-            this.suffix = exhibitionId;
-            responseProcessor = processor;
-//            StartCoroutine(DoExhibitionRequest());
-        }
 
         /// <summary>
         /// Queries the server for a list of postcard ids, requestable as images using GET_POSTCARD_ACTION
@@ -67,7 +51,31 @@ namespace Unibas.DBIS.VREP.Photobooth
             StartCoroutine(RequestPost<string, IdObject>(ServerUrl + POST_SNAPSHOT_ACTION,data, Handler.HandlePostSnapshot,
                 Handler.HandleError));
         }
-        
+
+        public void PostSnapshot(byte[] data)
+        {
+            
+        }
+
+        private IEnumerator UploadBytes(byte[] bytes, string url)
+        {
+            WWWForm form = new WWWForm();
+            form.AddBinaryData(FORM_FIELD_IMAGE_NAME, bytes, "image.png", "image/png");
+
+            using (var w = UnityWebRequest.Post(url, form))
+            {
+                yield return w.SendWebRequest();
+                if (w.isNetworkError || w.isHttpError)
+                {
+                    Handler.HandleError(w.error);
+                }
+                else
+                {
+                    string response = w.downloadHandler.text;
+                    Handler.HandlePostSnapshot(JsonUtility.FromJson<IdObject>(response));
+                }
+            }
+        }
 
         private static IEnumerator<WWW> RequestGet<O>(string url, Action<O> processor,
             Action<string> errorHandler = null)
