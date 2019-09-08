@@ -9,7 +9,23 @@ namespace Unibas.DBIS.VREP.Photobooth
 {
     public class ImageCapturerer : MonoBehaviour
     {
+        public Camera HackCam;
 
+        private Texture2D CaptureCam()
+        {
+            var Cam = HackCam;
+            RenderTexture currentRT = RenderTexture.active;
+            RenderTexture.active = Cam.targetTexture;
+ 
+            Cam.Render();
+ 
+            Texture2D Image = new Texture2D(Cam.targetTexture.width, Cam.targetTexture.height);
+            Image.ReadPixels(new Rect(0, 0, Cam.targetTexture.width, Cam.targetTexture.height), 0, 0);
+            Image.Apply();
+            RenderTexture.active = currentRT;
+            return Image;
+        }
+        
         public Renderer Renderer;
 
         public void Capture(Action<byte[]> handler)
@@ -21,7 +37,8 @@ namespace Unibas.DBIS.VREP.Photobooth
         private IEnumerator DoCapture(Action<byte[]> handler)
         {
             yield return new WaitForEndOfFrame();
-            var tex = Renderer.material.mainTexture.Convert();
+            //var tex = Renderer.material.mainTexture.Convert();
+            var tex = CaptureCam();
             var newTex = RotateAndCrop(tex);
             byte[] bytes = newTex.EncodeToPNG();
             Destroy(tex);
