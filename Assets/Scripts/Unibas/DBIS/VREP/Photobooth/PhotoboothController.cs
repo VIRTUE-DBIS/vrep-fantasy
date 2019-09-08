@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using DefaultNamespace;
 using Unibas.DBIS.VREP.Photobooth.Models;
 using UnityEngine;
 using UnityEngine.Networking;
@@ -19,11 +20,15 @@ namespace Unibas.DBIS.VREP.Photobooth
         private List<string> capturedCards = new List<string>();
         private string[] availableCards;
 
+        private AudioLoader audioLoader;
+
         private void Awake()
         {
             client = gameObject.AddComponent<PhotoboothClient>();
             client.SetServerURL("http://192.168.92.22:5002");
             client.Handler = this;
+
+            audioLoader = GetComponent<AudioLoader>();
         }
 
         private void Start()
@@ -37,7 +42,7 @@ namespace Unibas.DBIS.VREP.Photobooth
         {
             if (first)
             {
-                RequestRandomPostcard();
+                RequestSelectedPostcard();
                 first = false;
             }
         }
@@ -46,6 +51,11 @@ namespace Unibas.DBIS.VREP.Photobooth
         public void RequestRandomPostcard()
         {
             client.GetRandomPostcard();
+        }
+
+        public void RequestSelectedPostcard()
+        {
+            client.GetSelectedPostcard();
         }
 
         public void UploadImage()
@@ -100,8 +110,15 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         public void HandleRandomPostcard(PostcardsList list)
         {
+            HandlePostcardList(list);
+        }
+
+        public void HandlePostcardList(PostcardsList list)
+        {
             Debug.Log("Will display image with id: "+list.postcards[0]);
             DisplayPostcard(list.postcards[0]);
+            audioLoader.ReloadAudio(client.GetAudioUrl(list.postcards[0]));
+            
         }
 
         public void HandlePostSnapshot(IdObject idObject)
@@ -127,6 +144,12 @@ namespace Unibas.DBIS.VREP.Photobooth
         public void HandlePostcardInfo(ImageInfo obj)
         {
             Screen.Display(client.GetImageUrl(obj.id), obj.width, obj.height);
+        }
+
+        public void HandleSelectedPostcard(PostcardsList obj)
+        {
+            HandlePostcardList(obj);
+            
         }
 
         public void OnTriggerPressed()

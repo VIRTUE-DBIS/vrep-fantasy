@@ -15,6 +15,7 @@ namespace Unibas.DBIS.VREP.Photobooth
         public PhotoboothClientHandler Handler;
 
         private const string LIST_POSTCARDS_ACTION = "postcard/list";
+        private const string GET_SELECTED_POSTCARD_ACTION = "postcard/state/get";
         private const string GET_POSTCARDS_RANDOM_ACTION = "postcard/random";
         private const string GET_POSTCARD_ACTION = "postcard/image/:id";
         private const string POSTCARD_INFO_ACTION = "postcard/image/info/:id";
@@ -48,6 +49,12 @@ namespace Unibas.DBIS.VREP.Photobooth
         public void GetRandomPostcard()
         {
             StartCoroutine(RequestGet<PostcardsList>(ServerUrl + GET_POSTCARDS_RANDOM_ACTION, Handler.HandleRandomPostcard,
+                Handler.HandleError));
+        }
+
+        public void GetSelectedPostcard()
+        {
+            StartCoroutine(RequestGet<PostcardsList>(ServerUrl + GET_SELECTED_POSTCARD_ACTION, Handler.HandleSelectedPostcard,
                 Handler.HandleError));
         }
 
