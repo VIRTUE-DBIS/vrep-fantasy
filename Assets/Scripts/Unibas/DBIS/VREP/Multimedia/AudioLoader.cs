@@ -1,5 +1,6 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Networking;
 
 namespace DefaultNamespace
 {
@@ -16,6 +17,36 @@ namespace DefaultNamespace
         void Start()
         {
             audioSource = gameObject.AddComponent<AudioSource>();
+        }
+        
+        IEnumerator LoadClip(string url)
+        {
+            if (_loaded && _lastUrl.Equals(url))
+            {
+                Play();
+                yield break;
+            }
+            
+            using (UnityWebRequest uwr = UnityWebRequestMultimedia.GetAudioClip(url, AudioType.OGGVORBIS))
+            {
+                yield return uwr.SendWebRequest();
+
+                if (uwr.isNetworkError || uwr.isHttpError)
+                {
+                    Debug.Log(uwr.error);
+                }
+                else
+                {
+                    // Get downloaded asset bundle
+                    var audioClip = DownloadHandlerAudioClip.GetContent(uwr);
+                    audioSource.clip = audioClip;
+                    audioSource.volume = 0.2f;
+                    audioSource.loop = true;
+                    audioSource.Play();
+                    _loaded = true;
+                    _lastUrl = url;
+                }
+            }
         }
 
         private IEnumerator LoadAudio(string url)
@@ -74,7 +105,7 @@ namespace DefaultNamespace
         {
             if (!string.IsNullOrEmpty(url))
             {
-                StartCoroutine(LoadAudio(url));
+                StartCoroutine(LoadClip(url));
             }
         }
     }
