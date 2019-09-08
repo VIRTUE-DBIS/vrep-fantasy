@@ -20,13 +20,15 @@ namespace Unibas.DBIS.VREP.Photobooth
         private List<string> capturedCards = new List<string>();
         private string[] availableCards;
 
+        private string selectedId;
+
         private AudioLoader audioLoader;
 
         private void Awake()
         {
             client = gameObject.AddComponent<PhotoboothClient>();
-            client.SetServerURL("http://192.168.92.22:5002"); //debug
-            //client.SetServerURL("http://10.34.58.81:5002"); // productive
+            //client.SetServerURL("http://192.168.92.22:5002"); //debug
+            client.SetServerURL("http://10.34.58.81:5002"); // productive
             client.Handler = this;
 
             audioLoader = GetComponent<AudioLoader>();
@@ -64,7 +66,7 @@ namespace Unibas.DBIS.VREP.Photobooth
             Capturerer.Capture((bytes =>
             {
                 Debug.Log("Uplaoding image");
-                client.PostSnapshot(bytes, "C4823_1"); // TODO fix this
+                client.PostSnapshot(bytes, selectedId); // TODO fix this
                 Debug.Log("Sent bytes...");
             }));
         }
@@ -121,7 +123,8 @@ namespace Unibas.DBIS.VREP.Photobooth
             Debug.Log("Will display image with id: "+id);
             DisplayPostcard(id);
             audioLoader.ReloadAudio(client.GetAudioUrl(id));
-            
+            selectedId = id;
+
         }
 
         public void HandlePostSnapshot(IdObject idObject)
