@@ -70,9 +70,6 @@ namespace Unibas.DBIS.VREP.Photobooth
             material.mainTexture = texture;
 
             // Adjust the height of the quad based on the aspect to keep the texels square.
-            float aspect = (float)texture.width / (texture.height / 2f);
-
-            
             material.mainTextureOffset = new Vector2(TextureOffsetX, TextureOffsetY);
             material.mainTextureScale = new Vector2(1 * TextureScalingFactorX, -(1/2f) * TextureScalingFactorY);
 

@@ -11,7 +11,14 @@ namespace Unibas.DBIS.VREP.Photobooth
     {
 
         public Renderer Renderer;
-
+        
+        public float ScalingFactorX = 2f;
+        public float ScalingFactorY = 3f;
+        public float TextureScalingFactorX = 0.2f;
+        public float TextureScalingFactorY = 0.35f;
+        public float TextureOffsetX = 0.35f;
+        public float TextureOffsetY = 0.4f;
+       
         public void Capture(Action<byte[]> handler)
         {
             StartCoroutine(DoCapture(handler));
@@ -21,7 +28,12 @@ namespace Unibas.DBIS.VREP.Photobooth
         private IEnumerator DoCapture(Action<byte[]> handler)
         {
             yield return new WaitForEndOfFrame();
-            var tex = Renderer.material.mainTexture.Convert();
+            var material = Renderer.material;
+                
+            material.mainTextureOffset = new Vector2(TextureOffsetX, TextureOffsetY);
+            material.mainTextureScale = new Vector2(1 * TextureScalingFactorX, -(1 / 2f) * TextureScalingFactorY);
+
+            var tex = material.mainTexture.Convert();
             var newTex = RotateAndCrop(tex);
             byte[] bytes = newTex.EncodeToPNG();
             Destroy(tex);
@@ -34,7 +46,6 @@ namespace Unibas.DBIS.VREP.Photobooth
             var newHeight = tex.height / 2;
             Color[] pixels = new Color[newHeight*tex.width];
             Texture2D resized = new Texture2D(tex.width, newHeight, TextureFormat.RGB24, false);
-
             
             for(int y = 0; y<newHeight; y++)
             {
