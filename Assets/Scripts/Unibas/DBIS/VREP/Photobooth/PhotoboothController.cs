@@ -25,7 +25,8 @@ namespace Unibas.DBIS.VREP.Photobooth
         private void Awake()
         {
             client = gameObject.AddComponent<PhotoboothClient>();
-            client.SetServerURL("http://192.168.92.22:5002");
+            //client.SetServerURL("http://192.168.92.22:5002"); //debug
+            client.SetServerURL("http://10.34.58.81:5002"); // productive
             client.Handler = this;
 
             audioLoader = GetComponent<AudioLoader>();
@@ -115,9 +116,11 @@ namespace Unibas.DBIS.VREP.Photobooth
 
         public void HandlePostcardList(PostcardsList list)
         {
-            Debug.Log("Will display image with id: "+list.postcards[0]);
-            DisplayPostcard(list.postcards[0]);
-            audioLoader.ReloadAudio(client.GetAudioUrl(list.postcards[0]));
+            var id = list.postcards[0];
+            //var id = "C4206_1";
+            Debug.Log("Will display image with id: "+id);
+            DisplayPostcard(id);
+            audioLoader.ReloadAudio(client.GetAudioUrl(id));
             
         }
 

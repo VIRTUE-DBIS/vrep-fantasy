@@ -9,16 +9,25 @@ namespace Unibas.DBIS.VREP.Photobooth
 {
     public class ImageCapturerer : MonoBehaviour
     {
+        public Camera HackCam;
 
-        public Renderer Renderer;
+        private Texture2D CaptureCam()
+        {
+            var Cam = HackCam;
+            RenderTexture currentRT = RenderTexture.active;
+            RenderTexture.active = Cam.targetTexture;
+ 
+            Cam.Render();
+ 
+            Texture2D Image = new Texture2D(Cam.targetTexture.width, Cam.targetTexture.height);
+            Image.ReadPixels(new Rect(0, 0, Cam.targetTexture.width, Cam.targetTexture.height), 0, 0);
+            Image.Apply();
+            RenderTexture.active = currentRT;
+            return Image;
+        }
         
-        public float ScalingFactorX = 2f;
-        public float ScalingFactorY = 3f;
-        public float TextureScalingFactorX = 0.2f;
-        public float TextureScalingFactorY = 0.35f;
-        public float TextureOffsetX = 0.35f;
-        public float TextureOffsetY = 0.4f;
-       
+        public Renderer Renderer;
+
         public void Capture(Action<byte[]> handler)
         {
             StartCoroutine(DoCapture(handler));
@@ -28,20 +37,12 @@ namespace Unibas.DBIS.VREP.Photobooth
         private IEnumerator DoCapture(Action<byte[]> handler)
         {
             yield return new WaitForEndOfFrame();
-            var material = Renderer.material;
-            var tex = material.mainTexture.Convert();
-            var preproTex = RotateAndCrop(tex);
-
-            var x = (int) (preproTex.width * 0.35f);
-            var y = (int) (preproTex.height * 0.4f);
-            var height = preproTex.width;
-            var width = preproTex.width;
-
-            var prepro2Tex = preproTex.ReadPixels(new Rect(width, height), x, y);
-            
-            byte[] bytes = preproTex.EncodeToPNG();
+            //var tex = Renderer.material.mainTexture.Convert();
+            var tex = CaptureCam();
+            var newTex = RotateAndCrop(tex);
+            byte[] bytes = newTex.EncodeToPNG();
             Destroy(tex);
-            Destroy(preproTex);
+            Destroy(newTex);
             handler.Invoke(bytes);
         }
 
@@ -50,6 +51,7 @@ namespace Unibas.DBIS.VREP.Photobooth
             var newHeight = tex.height / 2;
             Color[] pixels = new Color[newHeight*tex.width];
             Texture2D resized = new Texture2D(tex.width, newHeight, TextureFormat.RGB24, false);
+
             
             for(int y = 0; y<newHeight; y++)
             {
