@@ -112,6 +112,25 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &39000909 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1713165086033716, guid: 693ba3952c1874807ad3166efd424e58,
+    type: 3}
+  m_PrefabInstance: {fileID: 1782933204}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &39000914
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 39000909}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64b93d99c57371468ae285f03dd5bcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startupUrl: http://192.168.92.22:5002/postcard/image/C4585_1.jpg
 --- !u!1 &123453529
 GameObject:
   m_ObjectHideFlags: 0
@@ -1076,7 +1095,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d64b93d99c57371468ae285f03dd5bcc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  startupUrl: 
+  startupUrl: http://192.168.92.22:5002/postcard/image/C18_1.jpg
 --- !u!4 &731344901 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 429506, guid: dc06161b6d97feb419f45f03b62e14b9,
@@ -1989,6 +2008,25 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 995871350}
   m_Mesh: {fileID: 10209, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!1 &997276213 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1713165086033716, guid: 693ba3952c1874807ad3166efd424e58,
+    type: 3}
+  m_PrefabInstance: {fileID: 1857009455}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &997276218
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 997276213}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64b93d99c57371468ae285f03dd5bcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startupUrl: http://192.168.92.22:5002/postcard/image/C4609_1.jpg
 --- !u!1001 &1003676428
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2254,6 +2292,25 @@ Light:
   m_UseColorTemperature: 0
   m_ShadowRadius: 0
   m_ShadowAngle: 0
+--- !u!1 &1129901997 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1713165086033716, guid: 693ba3952c1874807ad3166efd424e58,
+    type: 3}
+  m_PrefabInstance: {fileID: 1003676428}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1129901998
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1129901997}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d64b93d99c57371468ae285f03dd5bcc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  startupUrl: http://192.168.92.22:5002/postcard/image/C1863_1.jpg
 --- !u!1 &1138858999
 GameObject:
   m_ObjectHideFlags: 0
