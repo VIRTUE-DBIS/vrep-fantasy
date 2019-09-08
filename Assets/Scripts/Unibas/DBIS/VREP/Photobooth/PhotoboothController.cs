@@ -25,8 +25,8 @@ namespace Unibas.DBIS.VREP.Photobooth
         private void Awake()
         {
             client = gameObject.AddComponent<PhotoboothClient>();
-            //client.SetServerURL("http://192.168.92.22:5002"); //debug
-            client.SetServerURL("http://10.34.58.81:5002"); // productive
+            client.SetServerURL("http://192.168.92.22:5002"); //debug
+            //client.SetServerURL("http://10.34.58.81:5002"); // productive
             client.Handler = this;
 
             audioLoader = GetComponent<AudioLoader>();

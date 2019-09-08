@@ -37,8 +37,8 @@ namespace Unibas.DBIS.VREP.Photobooth
         private IEnumerator DoCapture(Action<byte[]> handler)
         {
             yield return new WaitForEndOfFrame();
-            //var tex = Renderer.material.mainTexture.Convert();
-            var tex = CaptureCam();
+            var tex = Renderer.material.mainTexture.Convert();
+            //var tex = CaptureCam();
             var newTex = RotateAndCrop(tex);
             byte[] bytes = newTex.EncodeToPNG();
             Destroy(tex);

@@ -3,15 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using DefaultNamespace;
 using UnityEngine;
+using Random = System.Random;
 
 public class ImageLoader : MonoBehaviour {
 
 	private MeshRenderer _renderer;
 
+	public string startupUrl;
+
 	// Use this for initialization
 	void Start () {
 		_renderer = GetComponent<MeshRenderer>();
 		//StartCoroutine(LoadImage());
+		if (startupUrl != null)
+		{
+			StartCoroutine(RandomlyWaitForLoading());
+		}
 	}
 		
 	private IEnumerator LoadImage(string url)
@@ -46,6 +53,15 @@ public class ImageLoader : MonoBehaviour {
 		
 	}
 
+
+	public IEnumerator RandomlyWaitForLoading()
+	{
+		var rand = new Random();
+		
+		yield return new WaitForSeconds(rand.Next(1,2));
+		ReloadImage(startupUrl);
+	}
+	
 	/// <summary>
 	/// 
 	/// </summary>

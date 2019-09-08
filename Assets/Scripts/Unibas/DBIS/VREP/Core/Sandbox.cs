@@ -14,7 +14,7 @@ namespace DefaultNamespace {
     
     void Start() {
       if (Enabled) {
-        TestObjectFactory();
+        //TestObjectFactory();
       }
       
       PuzzleStuff();
