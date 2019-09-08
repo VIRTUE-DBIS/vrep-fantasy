@@ -61,17 +61,21 @@ namespace Unibas.DBIS.VREP.Photobooth
             {
                 return;
             }
+            
+            Color[] c = texture.GetPixels ((int) (texture.width * TextureOffsetX), (int) (texture.height * TextureOffsetY), 200, 300);
+            Texture2D m2Texture = new Texture2D (200, 300);
+            m2Texture.SetPixels (c);
 
             // Apply the latest texture to the material.  This must be performed
             // every frame since the underlying texture is actually part of a ring
             // buffer which is updated in lock-step with its associated pose.
             // (You actually really only need to call any of the accessors which
             // internally call Update on the SteamVR_TrackedCamera.VideoStreamTexture).
-            material.mainTexture = texture;
+            material.mainTexture = m2Texture;
 
             // Adjust the height of the quad based on the aspect to keep the texels square.
-            material.mainTextureOffset = new Vector2(TextureOffsetX, TextureOffsetY);
-            material.mainTextureScale = new Vector2(1 * TextureScalingFactorX, -(1/2f) * TextureScalingFactorY);
+            //material.mainTextureOffset = new Vector2(TextureOffsetX, TextureOffsetY);
+            //material.mainTextureScale = new Vector2(1 * TextureScalingFactorX, -(1/2f) * TextureScalingFactorY);
 
             target.localScale = new Vector3(ScalingFactorX, ScalingFactorY, 1f);
 

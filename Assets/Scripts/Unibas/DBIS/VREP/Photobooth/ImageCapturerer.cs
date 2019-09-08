@@ -29,15 +29,19 @@ namespace Unibas.DBIS.VREP.Photobooth
         {
             yield return new WaitForEndOfFrame();
             var material = Renderer.material;
-                
-            material.mainTextureOffset = new Vector2(TextureOffsetX, TextureOffsetY);
-            material.mainTextureScale = new Vector2(1 * TextureScalingFactorX, -(1 / 2f) * TextureScalingFactorY);
-
             var tex = material.mainTexture.Convert();
-            var newTex = RotateAndCrop(tex);
-            byte[] bytes = newTex.EncodeToPNG();
+            var preproTex = RotateAndCrop(tex);
+
+            var x = (int) (preproTex.width * 0.35f);
+            var y = (int) (preproTex.height * 0.4f);
+            var height = preproTex.width;
+            var width = preproTex.width;
+
+            var prepro2Tex = preproTex.ReadPixels(new Rect(width, height), x, y);
+            
+            byte[] bytes = preproTex.EncodeToPNG();
             Destroy(tex);
-            Destroy(newTex);
+            Destroy(preproTex);
             handler.Invoke(bytes);
         }
 
