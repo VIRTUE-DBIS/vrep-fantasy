@@ -7,7 +7,7 @@ using UnityEngine.Networking;
 
 namespace Unibas.DBIS.VREP.Photobooth
 {
-    public class PhotoboothController : MonoBehaviour, PhotoboothClientHandler
+    public class PhotoboothController : MonoBehaviour, PhotoboothClientHandler, PhotoCaptureTriggerListener
     {
         private bool activated = false;
 
@@ -127,6 +127,11 @@ namespace Unibas.DBIS.VREP.Photobooth
         public void HandlePostcardInfo(ImageInfo obj)
         {
             Screen.Display(client.GetImageUrl(obj.id), obj.width, obj.height);
+        }
+
+        public void OnTriggerPressed()
+        {
+            UploadImage();
         }
     }
 }
