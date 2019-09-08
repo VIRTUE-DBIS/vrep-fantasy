@@ -10,10 +10,10 @@ namespace DefaultNamespace
             
             RenderTexture activeBackup = RenderTexture.active;
             
-            RenderTexture renderTexture = new RenderTexture(tex.width, tex.height/2, 24);
+            RenderTexture renderTexture = new RenderTexture(tex.width, tex.height, 24);
             Graphics.Blit(tex, renderTexture);
             RenderTexture.active = renderTexture;
-            image.ReadPixels(new Rect(0,renderTexture.height/2f,renderTexture.width, renderTexture.height/2f), 0,0);
+            image.ReadPixels(new Rect(0,0,renderTexture.width, renderTexture.height), 0,0); // cropping and resizing is done later, could be rect 0,0
             image.Apply();
 
             RenderTexture.active = activeBackup;

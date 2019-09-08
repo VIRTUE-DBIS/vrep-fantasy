@@ -23,8 +23,9 @@ namespace Unibas.DBIS.VREP.Photobooth
             yield return new WaitForEndOfFrame();
             var tex = Renderer.material.mainTexture.Convert();
             var newTex = RotateAndCrop(tex);
-            byte[] bytes = tex.EncodeToPNG();
+            byte[] bytes = newTex.EncodeToPNG();
             Destroy(tex);
+            Destroy(newTex);
             handler.Invoke(bytes);
         }
 
@@ -39,7 +40,8 @@ namespace Unibas.DBIS.VREP.Photobooth
             {
                 for (int x = 0; x < tex.width; x++)
                 {
-                    pixels[(newHeight-y) * tex.width + x] = tex.GetPixel(x, y + newHeight);
+                    var col = tex.GetPixel(x, y + newHeight);
+                    pixels[(newHeight - 1 - y) * tex.width + x] = col;
                 }
             }
             
