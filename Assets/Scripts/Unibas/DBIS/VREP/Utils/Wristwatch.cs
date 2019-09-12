@@ -1,8 +1,12 @@
 using System;
+using Unibas.DBIS.VREP;
 using UnityEngine;
 
 namespace DefaultNamespace
 {
+    /// <summary>
+    /// Wrist watch code by f.spiess@unibas.ch
+    /// </summary>
     public class Wristwatch : MonoBehaviour
     {
         private TextMesh watch;
@@ -12,8 +16,16 @@ namespace DefaultNamespace
 
         private void Start()
         {
-            watch = GetComponent<TextMesh>();
-            renderer = GetComponent<MeshRenderer>();
+            if (VREPController.Instance.Settings.WristwatchEnabled)
+            {
+                watch = GetComponent<TextMesh>();
+                renderer = GetComponent<MeshRenderer>();                
+            }
+            else
+            {
+                gameObject.SetActive(false);
+            }
+            
         }
 
         private void Update()

@@ -13,6 +13,8 @@ namespace DefaultNamespace
         /// </summary>
         public bool StartInLobby = true;
 
+        public Vector3 LobbyTeleportPoint = new Vector3(0,-10,0);
+        
         /// <summary>
         /// The Address of the VREM server instance, inclusive port
         /// Usually this is 127.0.0.1:4567
@@ -56,16 +58,24 @@ namespace DefaultNamespace
         public bool RequestExhibitions = false;
 
         /// <summary>
+        /// Whether the fancy wrist watch, displaying the real-world time, should be enabled or not.
+        /// Default: True
+        /// </summary>
+        public bool WristwatchEnabled = true;
+        
+        /// <summary>
         /// A list of exhibition ids, which shall be loaded
         /// Default: Empty
         /// </summary>
         public string[] exhibitionIds = new string[0];
 
+        
+        
         /// <summary>
         /// The file name of this settings file.
         /// </summary>
         public const string FILE_NAME = "settings.json";
-
+        
         private bool _default = false;
 
         /// <summary>

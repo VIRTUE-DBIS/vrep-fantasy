@@ -76,7 +76,7 @@ namespace Unibas.DBIS.VREP
             var go = GameObject.FindWithTag("Player");
             if (go != null && Settings.StartInLobby)
             {
-                go.transform.position = new Vector3(0, -9.9f, 0);
+                go.transform.position = Settings.LobbyTeleportPoint + new Vector3(0, .1f, 0);
             }
 
             var lby = GameObject.Find("Lobby");
